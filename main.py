@@ -1,21 +1,18 @@
 import random
 import keyboard
 import time
-
-three_stars_weapons="*弹弓 *鸦羽弓 *讨龙英杰谭 *黑缨枪 *沐浴龙血的剑 *飞天御剑 *冷刃 *神射手之誓 *翡玉法球 *魔岛绪论 *以理服人 *铁影阔剑 *黎明神剑".split()
-four_stars_figures ="**雷泽 **香菱 **北斗 **行秋 **菲谢尔 **诺艾尔 **重云 **迪奥娜 **砂糖 *辛炎 **芭芭拉 **凝光 **班尼特".split()
-four_stars_weapons ="**西风剑 **笛剑 **祭礼剑 **匣里龙吟 **西风大剑 **钟剑 **祭礼大剑 **雨裁 **匣里灭辰 **西风长枪 **西风秘典 **流浪乐章 **祭礼残章 **昭心 **西风烈弓 **绝弦 **祭礼弓 **弓藏".split()
-four_stars = four_stars_weapons + four_stars_figures
-five_stars_figures ="***琴 ***迪卢克 ***七七 ***莫娜 ***刻晴".split()
-
+import config
+import cv2
+import numpy as np
+from img_processing import *
 
 def random_gen(max_index) -> int:
         return random.randint(0,max_index)
 
-four_stars_count = 0
-five_stars_count = 0
-four_stars_miss = False
-five_stars_miss = False
+four_stars_count = 0  #四星保底，10次必出，出了刷新
+five_stars_count = 0  #五星保底，同上
+four_stars_miss = False  #四星是否歪了
+five_stars_miss = False  #五星是否歪了
 
 def five_stars_func():
     global five_stars_miss
@@ -26,11 +23,11 @@ def five_stars_func():
     num = random_gen(1)
     if five_stars_miss == True:
         five_stars_miss = False
-        return five_stars_figures[-1]
+        return up_five_stars_figures
     elif num==1:
-        return five_stars_figures[-1]
+        return up_five_stars_figures
     else:
-        num2 = random_gen(3)
+        num2 = random_gen(len(five_stars_figures)-1)
         five_stars_miss = True
         return five_stars_figures[num2]
 
@@ -41,23 +38,23 @@ def four_stars_func():
     four_stars_count = 0
     five_stars_count = five_stars_count + 1
     num = random_gen(1)
-    num2 = random_gen(2)
-    num3 = random_gen(27)
+    num2 = random_gen(len(up_four_stars_figures)-1)
+    num3 = random_gen(len(four_stars)-1)
     if four_stars_miss == True:
         four_stars_miss = False
-        return four_stars[-num2]
+        return up_four_stars_figures[num2]
     elif num==1:
-        return four_stars[-num2]
+        return up_four_stars_figures[num2]
     else:
         four_stars_miss = True
-        return four_stars[-num3]
+        return four_stars[num3]
 
 def three_stars_func():
     global four_stars_count
     global five_stars_count
     four_stars_count=four_stars_count + 1
     five_stars_count=five_stars_count + 1
-    num = random_gen(12)
+    num = random_gen(len(three_stars_weapons)-1)
     return three_stars_weapons[num]
 
 def extractor():
@@ -80,11 +77,43 @@ def ten_in_a_row():
     print(result)
     return result
 
+def take_one():
+    result = extractor()
+    print(result)
+    return result
+
 if __name__=='__main__':
+
+    opt = config.DefaultConfig()
+    Img = Imgs(opt.root)
+
+    #生成武器，角色列表
+    three_stars_weapons=lists_gen(opt.three_stars_weapons_root)
+    four_stars_figures =lists_gen(opt.four_stars_figures_root)
+    four_stars_weapons =lists_gen(opt.four_stars_weapons_root)
+    four_stars = four_stars_weapons + four_stars_figures
+    five_stars_figures =lists_gen(opt.five_stars_figures_root)
+    # five_stars_weapons = lists_gen(opt.five_stars_weapons_root)
+
+    #生成up武器和up角色
+    up_five_stars_figures= opt.up_five_stars_figures
+    up_four_stars_figures= opt.up_four_stars_figures.split()
+
+
+    #更新非up池
+    five_stars_figures.remove(up_five_stars_figures)
+    for up in up_four_stars_figures:
+        four_stars.remove(up)
+
     while 1:
         if keyboard.is_pressed('q'):
-            ten_in_a_row()
+            img_show(ten_in_a_row(),Img)
             time.sleep(0.1)
 
+        if keyboard.is_pressed('e'):
+            img_show(take_one().split(),Img)
+            time.sleep(0.1)
 
+        if keyboard.is_pressed('z'):
+            break
 
