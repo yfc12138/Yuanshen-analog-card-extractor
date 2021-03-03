@@ -1,9 +1,9 @@
 import random
-import keyboard
 import time
 import config
 import cv2
 import numpy as np
+from visualize import Visualization
 from img_processing import *
 
 def random_gen(max_index) -> int:
@@ -63,24 +63,35 @@ def extractor():
         return five_stars_func()
     elif four_stars_count == 9:
         return four_stars_func()
-    elif num<60:
+    elif num<60+max((five_stars_count-50),0)*40:
         return five_stars_func()
-    elif num<570:
+    elif num<570+max((five_stars_count-50),0)*40:
         return four_stars_func()
     else:
         return three_stars_func()
 
-def ten_in_a_row():
-    result = []
-    for i in range(10):
-        result.append(extractor())
-    print(result)
-    return result
+def baodi(func):
+    def wrapper(*args,**kw):
+        func(*args, **kw)
+        if five_stars_miss:
+            print('当前距离大保底还剩%s发' % (90 - five_stars_count))
+        else:
+            print('当前距离小保底还剩%s发' % (90 - five_stars_count))
+    return wrapper
 
-def take_one():
+@baodi
+def take_one(Img):
     result = extractor()
+    img_show(result.split(),Img)
     print(result)
-    return result
+
+
+@baodi
+def ten_in_a_row(Img):
+    result = [extractor() for i in range(10)]
+    img_show(result,Img)
+    print(result)
+
 
 if __name__=='__main__':
 
@@ -105,15 +116,5 @@ if __name__=='__main__':
     for up in up_four_stars_figures:
         four_stars.remove(up)
 
-    while 1:
-        if keyboard.is_pressed('q'):
-            img_show(ten_in_a_row(),Img)
-            time.sleep(0.1)
-
-        if keyboard.is_pressed('e'):
-            img_show(take_one().split(),Img)
-            time.sleep(0.1)
-
-        if keyboard.is_pressed('z'):
-            break
+    Visualization(Img,take_one,ten_in_a_row)
 

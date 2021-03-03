@@ -10,7 +10,7 @@ class DefaultConfig:
     three_stars_weapons_root = 'imgs/three_stars_weapons'
 
     up_five_stars_figures = '胡桃'
-    up_four_stars_figures = '班尼特 芭芭拉 凝光'
+    up_four_stars_figures = '重云 香菱 行秋'
 
     def new_parse(self,**kwargs):
         for i,v in kwargs.items():

@@ -2,7 +2,7 @@ import os
 import cv2
 import numpy as np
 
-class Imgs:                #
+class Imgs:
 
     def __init__(self,root):
         self.root = root
@@ -20,10 +20,7 @@ def lists_gen(root):         #通过检查imgs分类生成各个人物、武器�
     return name_list
 
 def img_show(results,Img):
-    img = []
-    for result in results:
-        result = result + '.png'
-        img.append(Img.imgs_return(result))
+    img = [Img.imgs_return(result+'.png') for result in results]
     res = np.hstack(img)
     cv2.imshow('result',res)
     cv2.waitKey(500)
