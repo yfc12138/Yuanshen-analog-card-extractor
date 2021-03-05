@@ -5,7 +5,6 @@ import cv2
 import numpy as np
 from visualize import Visualization
 from img_processing import *
-from img_resize import *
 
 def random_gen(max_index) -> int:
         return random.randint(0,max_index)
@@ -78,10 +77,10 @@ def baodi(func):
     def wrapper(*args,**kw):
         result=func(*args, **kw)
         if five_stars_miss:
-            print('当前距离大保底还剩%s发' % (90 - five_stars_count))
+            baodi_text='当前距离大保底还剩%s发' % (90 - five_stars_count)
         else:
-            print('当前距离小保底还剩%s发' % (90 - five_stars_count))
-        return result
+            baodi_text='当前距离小保底还剩%s发' % (90 - five_stars_count)
+        return result,baodi_text
     return wrapper
 
 @baodi

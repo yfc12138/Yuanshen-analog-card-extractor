@@ -8,7 +8,7 @@ class DefaultConfig:
     four_stars_weapons_root = 'imgs/four_stars_weapons'
     three_stars_weapons_root = 'imgs/three_stars_weapons'
 
-    up_five_stars_figures = '刻晴'
+    up_five_stars_figures = '胡桃'
     up_four_stars_figures = '重云 香菱 行秋'
 
     def new_parse(self,**kwargs):

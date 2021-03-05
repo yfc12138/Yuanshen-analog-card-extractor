@@ -27,7 +27,7 @@ class Visualization:
         self.shilianButton.place(x=1035,y=525)
 
     def video_loop(self,win,extractor_way):
-        animation_path,img_path = extractor_way()
+        (animation_path,img_path),baodi_info = extractor_way()
         vc = cv2.VideoCapture('pray_animation/'+animation_path+'.mp4')
         canvas = Canvas(win, height=700, width=1300)
         canvas.place(x=0, y=0)
@@ -43,10 +43,10 @@ class Visualization:
             else:
                 canvas.destroy()
                 break
-        return img_path
+        return img_path,baodi_info
 
     def outcome_show(self,win,extractor_way):
-        img_path = self.video_loop(win,extractor_way)
+        img_path,baodi_info = self.video_loop(win,extractor_way)
         canvas_list = [i for i in range(10)]
         image_file_list = [i for i in range(10)]
         if len(img_path) == 1:
@@ -57,9 +57,11 @@ class Visualization:
 
         else:
             for i,path in enumerate(img_path):
-                canvas_list[i] = Canvas(win, height=100, width=100)
+                canvas_list[i] = Canvas(win, height=100, width=100,)
                 image_file_list[i] = PhotoImage(file=path)
                 canvas_list[i].create_image(0, 0, anchor='nw', image=image_file_list[i])
                 canvas_list[i].place(x=300+i*100, y=600)
+        baodi_label = Label(win, height=6, width=37, text=baodi_info, bg='yellow',font=('Arial,25'))
+        baodi_label.place(x=0,y=600)
         win.mainloop()
 
