@@ -14,17 +14,18 @@ class Visualization:
         image_file = PhotoImage(file='visualize_img/胡桃池图.png')
         canvas1.create_image(0, 0, anchor='nw', image=image_file)
         canvas1.place(x=0,y=0)
-
+        self.image_file2 = PhotoImage(file='visualize_img/祈愿1次.png')
+        self.image_file3 = PhotoImage(file='visualize_img/祈愿10次.png')
         self.visualize_extractor(take_one, ten_in_a_row, window)
 
         window.mainloop()
 
     def visualize_extractor(self,take_one,ten_in_a_row,window):
-        self.danchouButton = Button(window, width=30,height=2,text='单抽慢性死亡', command=lambda:self.outcome_show(window,take_one))
-        self.danchouButton.place(x=780,y=525)
+        self.danchouButton = Button(window, width=225,height=46,text='单抽慢性死亡', command=lambda:self.outcome_show(window,take_one),image=self.image_file2)
+        self.danchouButton.place(x=776,y=524)
 
-        self.shilianButton = Button(window, width=30,height=2,text='十连瞬间暴毙', command=lambda:self.outcome_show(window,ten_in_a_row))
-        self.shilianButton.place(x=1035,y=525)
+        self.shilianButton = Button(window, width=225,height=46,text='十连瞬间暴毙', command=lambda:self.outcome_show(window,ten_in_a_row),image=self.image_file3)
+        self.shilianButton.place(x=1030,y=524)
 
     def video_loop(self,win,extractor_way):
         (animation_path,img_path),baodi_info = extractor_way()
